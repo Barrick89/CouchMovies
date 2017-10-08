@@ -3,12 +3,18 @@ package com.mahausch.couchmovies.utilities;
 
 import android.net.Uri;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
+import com.mahausch.couchmovies.Movie;
 
 public class NetworkUtils {
 
@@ -42,20 +48,55 @@ public class NetworkUtils {
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-        try{
-            InputStream input = urlConnection.getInputStream();
+        if (urlConnection.getResponseCode() == 200) {
+            try {
+                InputStream input = urlConnection.getInputStream();
 
-            Scanner scanner = new Scanner(input);
-            scanner.useDelimiter("\\A");
+                Scanner scanner = new Scanner(input);
+                scanner.useDelimiter("\\A");
 
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
+                boolean hasInput = scanner.hasNext();
+                if (hasInput) {
+                    return scanner.next();
+                } else {
+                    return null;
+                }
+            } finally {
+                urlConnection.disconnect();
             }
-        } finally {
-            urlConnection.disconnect();
+        }else {
+            return null;
         }
+    }
+
+    public static ArrayList getMovieDataFromJson (String jsonData) throws JSONException {
+
+        ArrayList movieList = null;
+
+        if (jsonData != null) {
+            JSONObject jsonObject = new JSONObject(jsonData);
+
+            JSONArray results = jsonObject.getJSONArray("results");
+
+            String image;
+            String title;
+            String date;
+            String plot;
+            double rating;
+
+            for (int i = 0; i < results.length(); i++ ){
+                JSONObject movieObject = results.getJSONObject(i);
+                image = movieObject.getString("poster_path");
+                title = movieObject.getString("title");
+                date = movieObject.getString("release_date");
+                plot = movieObject.getString("overview");
+                rating = movieObject.getDouble("vote_average");
+
+                Movie movie = new Movie (image, title, date, plot, rating);
+
+                movieList.add(movie);
+            }
+        }
+        return movieList;
     }
 }
