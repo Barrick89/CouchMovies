@@ -9,9 +9,11 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder>{
 
-    private String [] mImageData;
+    private ArrayList<Movie> mMovieData;
     private final MovieAdapterOnClickHandler mOnClickHandler;
 
     public MovieAdapter (MovieAdapterOnClickHandler onClickHandler) {
@@ -33,26 +35,26 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
 
     @Override
     public void onBindViewHolder(MovieAdapter.MovieHolder holder, int position) {
-        String image = mImageData[position];
-        Picasso.with(holder.mImageView.getContext()).load(image).into(holder.mImageView);
+        Movie movie = mMovieData.get(position);
+        Picasso.with(holder.mImageView.getContext()).load(movie.getImage()).into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        if (mImageData != null) {
-            return mImageData.length;
+        if (mMovieData != null) {
+            return mMovieData.size();
         } else {
             return 0;
         }
     }
 
-    public void setImageData (String [] imageData) {
-        mImageData = imageData;
+    public void setImageData (ArrayList<Movie> movieData) {
+        mMovieData = movieData;
         notifyDataSetChanged();
     }
 
     public interface MovieAdapterOnClickHandler {
-        public void onClick (String imageData);
+        public void onClick (Movie movieData);
     }
 
     class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -67,8 +69,8 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            String image = mImageData[position];
-            mOnClickHandler.onClick(image);
+            Movie movie = mMovieData.get(position);
+            mOnClickHandler.onClick(movie);
         }
     }
 }

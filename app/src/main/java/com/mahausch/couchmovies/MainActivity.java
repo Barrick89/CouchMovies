@@ -1,9 +1,12 @@
 package com.mahausch.couchmovies;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
@@ -25,7 +28,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onClick(String imageData) {
+    public void onClick(Movie movieData) {
 
+    }
+
+    public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+
+        @Override
+        protected ArrayList<Movie> doInBackground(String... strings) {
+            return null;
+        }
     }
 }
