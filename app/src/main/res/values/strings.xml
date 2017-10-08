@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CouchMovies</string>
+
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_popularity_value</string>
+
+    <string name="settings_order_by_popularity_label">Most popular</string>
+    <string name="settings_order_by_popularity_value" translatable="false">popular</string>
+
+    <string name="settings_order_by_rating_label">Highest rated</string>
+    <string name="settings_order_by_rating_value" translatable="false">rating</string>
 </resources>

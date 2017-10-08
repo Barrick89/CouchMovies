@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.mahausch.couchmovies.Movie;
+import com.mahausch.couchmovies.R;
 
 public class NetworkUtils {
 
@@ -24,11 +25,11 @@ public class NetworkUtils {
     private static final String API_KEY = "";
 
 
-    public static URL buildUrl(Integer searchCategory) {
+    public static URL buildUrl(String searchCategory) {
 
         Uri uri;
 
-        if (searchCategory == 1) {
+        if (searchCategory.equals("popular")) {
             uri = Uri.parse(POPULAR_MOVIES_URL + API_KEY);
         } else {
             uri = Uri.parse(TOP_RATED_MOVIES_URL + API_KEY);
