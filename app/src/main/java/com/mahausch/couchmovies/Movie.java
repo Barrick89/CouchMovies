@@ -2,6 +2,8 @@ package com.mahausch.couchmovies;
 
 public class Movie {
 
+    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+
     private String mImage;
     private String mTitle;
     private String mDate;
@@ -9,7 +11,7 @@ public class Movie {
     private double mRating;
 
     public Movie (String image, String title, String date, String plot, double rating) {
-        mImage = image;
+        mImage = IMAGE_BASE_URL + image;
         mTitle = title;
         mDate = date;
         mPlot = plot;
@@ -17,6 +19,7 @@ public class Movie {
     }
 
     public String getImage () {
+
         return mImage;
     }
 
