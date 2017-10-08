@@ -6,9 +6,9 @@ public class Movie {
     private String mTitle;
     private String mDate;
     private String mPlot;
-    private int mRating;
+    private double mRating;
 
-    public Movie (String image, String title, String date, String plot, int rating) {
+    public Movie (String image, String title, String date, String plot, double rating) {
         mImage = image;
         mTitle = title;
         mDate = date;
@@ -32,7 +32,7 @@ public class Movie {
         return mPlot;
     }
 
-    public int getRating() {
+    public double getRating() {
         return mRating;
     }
 }
