@@ -49,13 +49,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                 ArrayList<Movie> movieList = NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
 
+                return movieList;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
+        }
 
+        @Override
+        protected void onPostExecute(ArrayList<Movie> movies) {
 
-            return null;
+            if (movies != null) {
+                mAdapter.setMovieData(movies);
+            }
         }
     }
 }
