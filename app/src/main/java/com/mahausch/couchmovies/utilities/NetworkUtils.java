@@ -48,7 +48,6 @@ public class NetworkUtils {
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-        if (urlConnection.getResponseCode() == 200) {
             try {
                 InputStream input = urlConnection.getInputStream();
 
@@ -64,14 +63,11 @@ public class NetworkUtils {
             } finally {
                 urlConnection.disconnect();
             }
-        }else {
-            return null;
-        }
     }
 
     public static ArrayList getMovieDataFromJson (String jsonData) throws JSONException {
 
-        ArrayList movieList = null;
+        ArrayList movieList = new ArrayList();
 
         if (jsonData != null) {
             JSONObject jsonObject = new JSONObject(jsonData);

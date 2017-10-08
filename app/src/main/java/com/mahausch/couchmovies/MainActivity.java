@@ -25,11 +25,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_grid);
 
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, R.id.movie_grid);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
         mAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+        new FetchMoviesTask().execute(1);
     }
 
     @Override

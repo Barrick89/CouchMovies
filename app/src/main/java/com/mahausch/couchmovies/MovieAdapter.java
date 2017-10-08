@@ -48,7 +48,7 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
         }
     }
 
-    public void setImageData (ArrayList<Movie> movieData) {
+    public void setMovieData (ArrayList<Movie> movieData) {
         mMovieData = movieData;
         notifyDataSetChanged();
     }
