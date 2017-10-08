@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.mahausch.couchmovies.utilities.NetworkUtils;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -43,7 +44,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             URL movieResponseURL = NetworkUtils.buildUrl(integers[0]);
 
-            String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
+            try {
+                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
+
+                ArrayList<Movie> movieList = NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
 
             return null;
         }
