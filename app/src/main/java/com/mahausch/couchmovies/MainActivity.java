@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     RecyclerView mRecyclerView;
+    MovieAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,5 +19,13 @@ public class MainActivity extends AppCompatActivity {
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, R.id.movie_grid);
         mRecyclerView.setLayoutManager(layoutManager);
+
+        mAdapter = new MovieAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onClick(String imageData) {
+
     }
 }

@@ -12,6 +12,11 @@ import com.squareup.picasso.Picasso;
 public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder>{
 
     private String [] mImageData;
+    private final MovieAdapterOnClickHandler mOnClickHandler;
+
+    public MovieAdapter (MovieAdapterOnClickHandler onClickHandler) {
+        mOnClickHandler = onClickHandler;
+    }
 
 
     @Override
@@ -46,13 +51,24 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
         notifyDataSetChanged();
     }
 
-    class MovieHolder extends RecyclerView.ViewHolder {
+    public interface MovieAdapterOnClickHandler {
+        public void onClick (String imageData);
+    }
+
+    class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final ImageView mImageView;
 
         public MovieHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.image);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            String image = mImageData[position];
+            mOnClickHandler.onClick(image);
         }
     }
 }
