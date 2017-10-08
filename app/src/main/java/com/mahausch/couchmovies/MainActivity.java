@@ -1,11 +1,15 @@
 package com.mahausch.couchmovies;
 
+import android.net.Network;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.mahausch.couchmovies.utilities.NetworkUtils;
+
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
@@ -32,10 +36,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+    public class FetchMoviesTask extends AsyncTask<Integer, Void, ArrayList<Movie>> {
 
         @Override
-        protected ArrayList<Movie> doInBackground(String... strings) {
+        protected ArrayList<Movie> doInBackground(Integer... integers) {
+
+            URL movieResponseURL = NetworkUtils.buildUrl(integers[0]);
+
+            String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
+
             return null;
         }
     }
