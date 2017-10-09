@@ -1,8 +1,11 @@
 package com.mahausch.couchmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.mahausch.couchmovies.utilities.NetworkUtils;
 
@@ -98,13 +102,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     public void startTask() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String orderBy = sharedPrefs.getString(
-                getString(R.string.settings_order_by_key),
-                getString(R.string.settings_order_by_default)
-        );
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        new FetchMoviesTask().execute(orderBy);
+        if (networkInfo != null && networkInfo.isConnected()) {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+            String orderBy = sharedPrefs.getString(
+                    getString(R.string.settings_order_by_key),
+                    getString(R.string.settings_order_by_default)
+            );
+
+            new FetchMoviesTask().execute(orderBy);
+        } else {
+            Toast toast = Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }

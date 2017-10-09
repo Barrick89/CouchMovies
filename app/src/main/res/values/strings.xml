@@ -13,4 +13,6 @@
 
     <string name="settings_order_by_rating_label">Highest rated</string>
     <string name="settings_order_by_rating_value" translatable="false">rating</string>
+
+    <string name="network_error">No internet connection.</string>
 </resources>
