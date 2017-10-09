@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mahausch.couchmovies.utilities.NetworkUtils;
@@ -28,11 +30,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     RecyclerView mRecyclerView;
     MovieAdapter mAdapter;
+    ProgressBar mProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProgress = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_grid);
 
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
-
+            mProgress.setVisibility(View.INVISIBLE);
             if (movies != null) {
                 mAdapter.setMovieData(movies);
             }
@@ -108,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
+            mProgress.setVisibility(View.VISIBLE);
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
             String orderBy = sharedPrefs.getString(
@@ -117,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             new FetchMoviesTask().execute(orderBy);
         } else {
+            mProgress.setVisibility(View.INVISIBLE);
             Toast toast = Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT);
             toast.show();
         }
