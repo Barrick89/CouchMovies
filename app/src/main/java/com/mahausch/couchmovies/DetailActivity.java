@@ -34,7 +34,8 @@ public class DetailActivity extends AppCompatActivity {
         mTitle.setText(intent.getStringExtra("title"));
         mDate.setText(intent.getStringExtra("date"));
         Picasso.with(mImage.getContext()).load(intent.getStringExtra("image")).into(mImage);
-        mRating.setText(intent.getStringExtra("rating"));
+        Double rating = intent.getDoubleExtra("rating", 0.0);
+        mRating.setText(rating.toString());
         mPlot.setText(intent.getStringExtra("plot"));
 
     }
