@@ -66,13 +66,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onClick(Movie movieData) {
-
+        if (movieData != null) {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("title", movieData.getTitle());
+            intent.putExtra("image", movieData.getImage());
+            intent.putExtra("date", movieData.getDate());
+            intent.putExtra("rating", movieData.getRating());
+            intent.putExtra("plot", movieData.getPlot());
+            startActivity(intent);
+        }
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         @Override
-        protected ArrayList<Movie> doInBackground(String...strings) {
+        protected ArrayList<Movie> doInBackground(String... strings) {
 
             URL movieResponseURL = NetworkUtils.buildUrl(strings[0]);
 

@@ -26,7 +26,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mahausch.couchmovies.MainActivity" />
         </activity>
-        <activity android:name=".DetailActivity"></activity>
+        <activity
+            android:name=".DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mahausch.couchmovies.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
