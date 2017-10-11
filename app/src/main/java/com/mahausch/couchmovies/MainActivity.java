@@ -32,12 +32,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     RecyclerView mRecyclerView;
     MovieAdapter mAdapter;
     ProgressBar mProgress;
+    SharedPreferences mSharedPref;
+    String mPreference;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mPreference = mSharedPref.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
+        );
 
         mProgress = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
@@ -125,7 +134,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onResume() {
         super.onResume();
-        startTask();
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
+        );
+
+        if (mPreference.equals(orderBy)) {
+            return;
+        } else {
+            startTask();
+        }
     }
 
     public void startTask() {
