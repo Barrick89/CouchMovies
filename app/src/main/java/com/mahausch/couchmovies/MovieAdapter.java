@@ -11,12 +11,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder>{
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
 
     private ArrayList<Movie> mMovieData;
     private final MovieAdapterOnClickHandler mOnClickHandler;
 
-    public MovieAdapter (MovieAdapterOnClickHandler onClickHandler) {
+    public MovieAdapter(MovieAdapterOnClickHandler onClickHandler) {
         mOnClickHandler = onClickHandler;
     }
 
@@ -29,7 +29,7 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
         int layout = R.layout.grid_item;
         boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate (layout, parent, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layout, parent, shouldAttachToParentImmediately);
         return new MovieHolder(view);
     }
 
@@ -48,13 +48,13 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MovieHolder
         }
     }
 
-    public void setMovieData (ArrayList<Movie> movieData) {
+    public void setMovieData(ArrayList<Movie> movieData) {
         mMovieData = movieData;
         notifyDataSetChanged();
     }
 
     public interface MovieAdapterOnClickHandler {
-        public void onClick (Movie movieData);
+        public void onClick(Movie movieData);
     }
 
     class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

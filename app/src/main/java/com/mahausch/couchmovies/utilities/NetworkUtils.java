@@ -1,7 +1,8 @@
 package com.mahausch.couchmovies.utilities;
 
-
 import android.net.Uri;
+
+import com.mahausch.couchmovies.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,8 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
-import com.mahausch.couchmovies.Movie;
-import com.mahausch.couchmovies.R;
 
 public class NetworkUtils {
 
@@ -45,28 +44,28 @@ public class NetworkUtils {
 
     }
 
-    public static String getResponseFromHttpUrl (URL url) throws IOException {
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-            try {
-                InputStream input = urlConnection.getInputStream();
+        try {
+            InputStream input = urlConnection.getInputStream();
 
-                Scanner scanner = new Scanner(input);
-                scanner.useDelimiter("\\A");
+            Scanner scanner = new Scanner(input);
+            scanner.useDelimiter("\\A");
 
-                boolean hasInput = scanner.hasNext();
-                if (hasInput) {
-                    return scanner.next();
-                } else {
-                    return null;
-                }
-            } finally {
-                urlConnection.disconnect();
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                return scanner.next();
+            } else {
+                return null;
             }
+        } finally {
+            urlConnection.disconnect();
+        }
     }
 
-    public static ArrayList getMovieDataFromJson (String jsonData) throws JSONException {
+    public static ArrayList getMovieDataFromJson(String jsonData) throws JSONException {
 
         ArrayList movieList = new ArrayList();
 
@@ -81,7 +80,7 @@ public class NetworkUtils {
             String plot;
             double rating;
 
-            for (int i = 0; i < results.length(); i++ ){
+            for (int i = 0; i < results.length(); i++) {
                 JSONObject movieObject = results.getJSONObject(i);
                 image = movieObject.getString("poster_path");
                 title = movieObject.getString("title");
@@ -89,7 +88,7 @@ public class NetworkUtils {
                 plot = movieObject.getString("overview");
                 rating = movieObject.getDouble("vote_average");
 
-                Movie movie = new Movie (image, title, date, plot, rating);
+                Movie movie = new Movie(image, title, date, plot, rating);
 
                 movieList.add(movie);
             }

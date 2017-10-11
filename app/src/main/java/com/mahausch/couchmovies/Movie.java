@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static android.R.attr.format;
-
 public class Movie {
 
     private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
@@ -16,7 +14,7 @@ public class Movie {
     private String mPlot;
     private double mRating;
 
-    public Movie (String image, String title, String date, String plot, double rating) {
+    public Movie(String image, String title, String date, String plot, double rating) {
         mImage = IMAGE_BASE_URL + image;
         mTitle = title;
         mDate = date;
@@ -24,7 +22,7 @@ public class Movie {
         mRating = rating;
     }
 
-    public String getImage () {
+    public String getImage() {
 
         return mImage;
     }

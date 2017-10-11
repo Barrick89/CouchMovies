@@ -4,17 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +20,6 @@ import android.widget.Toast;
 
 import com.mahausch.couchmovies.utilities.NetworkUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -86,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+    private class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         @Override
         protected ArrayList<Movie> doInBackground(String... strings) {
@@ -96,9 +92,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
 
-                ArrayList<Movie> movieList = NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
+                return NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
 
-                return movieList;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -142,9 +137,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 getString(R.string.settings_order_by_default)
         );
 
-        if (mPreference.equals(orderBy)) {
-            return;
-        } else {
+        if (!mPreference.equals(orderBy)) {
             startTask();
         }
     }
