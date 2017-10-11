@@ -38,5 +38,13 @@ public class DetailActivity extends AppCompatActivity {
         mRating.setText(rating.toString());
         mPlot.setText(intent.getStringExtra("plot"));
 
+        if (rating < 4.0) {
+            mRating.setBackgroundResource(R.color.bad);
+        } else if (rating < 7.0) {
+            mRating.setBackgroundResource(R.color.mediocre);
+        } else {
+            mRating.setBackgroundResource(R.color.good);
+        }
+
     }
 }

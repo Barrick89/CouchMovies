@@ -1,5 +1,11 @@
 package com.mahausch.couchmovies;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.R.attr.format;
+
 public class Movie {
 
     private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
@@ -28,7 +34,16 @@ public class Movie {
     }
 
     public String getDate() {
-        return mDate;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = formatter.parse(mDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        formatter = new SimpleDateFormat("dd.MM.yyyy");
+        String formattedDate = formatter.format(date);
+        return formattedDate;
     }
 
     public String getPlot() {
