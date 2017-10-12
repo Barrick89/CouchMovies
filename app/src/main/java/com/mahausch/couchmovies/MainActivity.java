@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mProgress.setVisibility(View.INVISIBLE);
             if (movies != null) {
                 mAdapter.setMovieData(movies);
+            } else {
+                Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
     }
