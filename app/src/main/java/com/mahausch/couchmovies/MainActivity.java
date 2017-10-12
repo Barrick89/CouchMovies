@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         );
 
         if (!mPreference.equals(orderBy)) {
+            mPreference = orderBy;
             startTask();
         }
     }
