@@ -28,13 +28,14 @@ public class DetailActivity extends AppCompatActivity {
         mPlot = (TextView) findViewById(R.id.plot_textview);
 
         Intent intent = getIntent();
+        Movie movie = intent.getParcelableExtra("movie");
 
-        mTitle.setText(intent.getStringExtra("title"));
-        mDate.setText(intent.getStringExtra("date"));
-        Picasso.with(mImage.getContext()).load(intent.getStringExtra("image")).into(mImage);
-        Double rating = intent.getDoubleExtra("rating", 0.0);
+        mTitle.setText(movie.getTitle());
+        mDate.setText(movie.getDate());
+        Picasso.with(mImage.getContext()).load(movie.getImage()).into(mImage);
+        Double rating = movie.getRating();
         mRating.setText(rating.toString());
-        mPlot.setText(intent.getStringExtra("plot"));
+        mPlot.setText(movie.getPlot());
 
         if (rating < 4.0) {
             mRating.setBackgroundResource(R.color.bad);

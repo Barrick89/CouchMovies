@@ -73,13 +73,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onClick(Movie movieData) {
 
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("title", movieData.getTitle());
-        intent.putExtra("image", movieData.getImage());
-        intent.putExtra("date", movieData.getDate());
-        intent.putExtra("rating", movieData.getRating());
-        intent.putExtra("plot", movieData.getPlot());
+        intent.putExtra("movie", movieData);
         startActivity(intent);
-
     }
 
     private class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {

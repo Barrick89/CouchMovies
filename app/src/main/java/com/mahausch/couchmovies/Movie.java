@@ -1,10 +1,13 @@
 package com.mahausch.couchmovies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
@@ -15,16 +18,20 @@ public class Movie {
     private double mRating;
 
     public Movie(String image, String title, String date, String plot, double rating) {
-        mImage = IMAGE_BASE_URL + image;
+        mImage = image;
         mTitle = title;
         mDate = date;
         mPlot = plot;
         mRating = rating;
     }
 
-    public String getImage() {
+    public Movie (Parcel in){
+        readFromParcel(in);
+    }
 
-        return mImage;
+    public String getImage() {
+        String image = IMAGE_BASE_URL + mImage;
+        return image;
     }
 
     public String getTitle() {
@@ -50,5 +57,42 @@ public class Movie {
 
     public double getRating() {
         return mRating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mImage);
+        parcel.writeString(mTitle);
+        parcel.writeString(mDate);
+        parcel.writeString(mPlot);
+        parcel.writeDouble(mRating);
+    }
+
+    public void readFromParcel (Parcel in){
+        mImage = in.readString();
+        mTitle = in.readString();
+        mDate = in.readString();
+        mPlot = in.readString();
+        mRating = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Creator<Movie>() {
+
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[i];
+        }
+    }; {
+
     }
 }
