@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class Movie implements Parcelable {
 
-    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w342/";
 
     private String mImage;
     private String mTitle;
