@@ -8,6 +8,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,7 +26,7 @@ import com.mahausch.couchmovies.utilities.NetworkUtils;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
 
     RecyclerView mRecyclerView;
     MovieAdapter mAdapter;
@@ -37,13 +40,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mPreference = mSharedPref.getString(
-                getString(R.string.settings_order_by_key),
-                getString(R.string.settings_order_by_default)
-        );
-
         mProgress = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_grid);
@@ -54,7 +50,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        startTask();
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mPreference = mSharedPref.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default)
+        );
+
+        startTaskLoader();
 
         final SwipeRefreshLayout swipe = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
 
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             @Override
             public void onRefresh() {
-                startTask();
+                startTaskLoader();
                 swipe.setRefreshing(false);
             }
         });
@@ -77,34 +80,52 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(intent);
     }
 
-    private class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+    @Override
+    public Loader<ArrayList<Movie>> onCreateLoader(int id, final Bundle args) {
 
-        @Override
-        protected ArrayList<Movie> doInBackground(String... strings) {
+        return new AsyncTaskLoader<ArrayList<Movie>>(this) {
 
-            URL movieResponseURL = NetworkUtils.buildUrl(strings[0]);
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
 
-            try {
-                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
 
-                return NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+                mProgress.setVisibility(View.VISIBLE);
+                forceLoad();
             }
-        }
 
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            mProgress.setVisibility(View.INVISIBLE);
-            if (movies != null) {
-                mAdapter.setMovieData(movies);
-            } else {
-                Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
-                toast.show();
+            @Override
+            public ArrayList<Movie> loadInBackground() {
+
+                URL movieResponseURL = NetworkUtils.buildUrl(mPreference);
+
+                try {
+                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
+
+                    return NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
+        mProgress.setVisibility(View.INVISIBLE);
+        if (data != null) {
+            mAdapter.setMovieData(data);
+        } else {
+            Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
+            toast.show();
         }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+
     }
 
     @Override
@@ -137,11 +158,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         if (!mPreference.equals(orderBy)) {
             mPreference = orderBy;
-            startTask();
+            startTaskLoader();
         }
     }
 
-    public void startTask() {
+    public void startTaskLoader() {
 
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -149,14 +170,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         if (networkInfo != null && networkInfo.isConnected()) {
             mProgress.setVisibility(View.VISIBLE);
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-            String orderBy = sharedPrefs.getString(
-                    getString(R.string.settings_order_by_key),
-                    getString(R.string.settings_order_by_default)
-            );
+            getSupportLoaderManager().restartLoader(1, null, this);
 
-            new FetchMoviesTask().execute(orderBy);
         } else {
             mProgress.setVisibility(View.INVISIBLE);
             Toast toast = Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT);
