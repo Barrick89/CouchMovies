@@ -97,10 +97,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             @Override
             public ArrayList<Movie> loadInBackground() {
 
-                URL movieResponseURL = NetworkUtils.buildUrl(mPreference);
+                ArrayList<URL> movieResponseURLs = NetworkUtils.buildUrl(mPreference);
 
                 try {
-                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURL);
+                    ArrayList<String> jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieResponseURLs);
 
                     return NetworkUtils.getMovieDataFromJson(jsonMovieResponse);
 
