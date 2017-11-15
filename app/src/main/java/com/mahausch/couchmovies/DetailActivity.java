@@ -1,6 +1,7 @@
 package com.mahausch.couchmovies;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,9 +39,10 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView mImage;
     private TextView mRating;
     private TextView mPlot;
-    private LinearLayout mTrailer1;
-    private LinearLayout mTrailer2;
-    private LinearLayout mTrailer3;
+    private TextView mTrailer1;
+    private TextView mTrailer2;
+    private TextView mTrailer3;
+    private TrailerListener mListener;
 
     public ArrayList<String> mList;
 
@@ -53,10 +56,10 @@ public class DetailActivity extends AppCompatActivity {
         mImage = (ImageView) findViewById(R.id.imageview);
         mRating = (TextView) findViewById(R.id.rating_textview);
         mPlot = (TextView) findViewById(R.id.plot_textview);
-        mTrailer1 = (LinearLayout) findViewById(R.id.trailerLayout1);
-        mTrailer2 = (LinearLayout) findViewById(R.id.trailerLayout2);
-        mTrailer3 = (LinearLayout) findViewById(R.id.trailerLayout3);
-
+        mTrailer1 = (TextView) findViewById(R.id.trailer_1);
+        mTrailer2 = (TextView) findViewById(R.id.trailer_2);
+        mTrailer3 = (TextView) findViewById(R.id.trailer_3);
+        mListener = new TrailerListener();
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra("movie");
@@ -81,25 +84,6 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void startTrailer(View view){
-
-        int id = view.getId();
-        String trailerId = "";
-
-        if (id == R.id.trailer_1){
-            trailerId = mList.get(0);
-        } else if (id == R.id.trailer_2){
-            trailerId = mList.get(1);
-        }else if (id == R.id.trailer_3) {
-            trailerId = mList.get(2);
-        } else {
-            return;
-        }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(YOUTUBE_URL+trailerId));
-        startActivity(intent);
-    }
 
     public class TrailerTask extends AsyncTask<Integer,Void,ArrayList<String>> {
 
@@ -169,15 +153,44 @@ public class DetailActivity extends AppCompatActivity {
             int size = mList.size();
 
             if(size == 1) {
-                mTrailer1.setVisibility(View.VISIBLE);
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer1.setTextColor(Color.BLACK);
             } else if (size == 2) {
-                mTrailer1.setVisibility(View.VISIBLE);
-                mTrailer2.setVisibility(View.VISIBLE);
+                mTrailer1.setTextColor(Color.BLACK);
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer2.setTextColor(Color.BLACK);
+                mTrailer2.setOnClickListener(mListener);
             } else if (size >= 3) {
-                mTrailer1.setVisibility(View.VISIBLE);
-                mTrailer2.setVisibility(View.VISIBLE);
-                mTrailer3.setVisibility(View.VISIBLE);
+                mTrailer1.setTextColor(Color.BLACK);
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer2.setTextColor(Color.BLACK);
+                mTrailer2.setOnClickListener(mListener);
+                mTrailer3.setTextColor(Color.BLACK);
+                mTrailer3.setOnClickListener(mListener);
             }
+        }
+    }
+
+    public class TrailerListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            String trailerId = "";
+
+            if (id == R.id.trailer_1){
+                trailerId = mList.get(0);
+            } else if (id == R.id.trailer_2){
+                trailerId = mList.get(1);
+            }else if (id == R.id.trailer_3) {
+                trailerId = mList.get(2);
+            } else {
+                return;
+            }
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(YOUTUBE_URL+trailerId));
+            startActivity(intent);
         }
     }
 }
