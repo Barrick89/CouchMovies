@@ -13,13 +13,15 @@ public class Movie implements Parcelable {
 
     private String mImage;
     private String mTitle;
+    private int mMovieId;
     private String mDate;
     private String mPlot;
     private double mRating;
 
-    public Movie(String image, String title, String date, String plot, double rating) {
+    public Movie(String image, String title, int movieId, String date, String plot, double rating) {
         mImage = image;
         mTitle = title;
+        mMovieId = movieId;
         mDate = date;
         mPlot = plot;
         mRating = rating;
@@ -36,6 +38,10 @@ public class Movie implements Parcelable {
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public int getMovieId(){
+        return mMovieId;
     }
 
     public String getDate() {

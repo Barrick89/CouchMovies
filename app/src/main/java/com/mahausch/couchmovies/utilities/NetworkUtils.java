@@ -90,6 +90,7 @@ public class NetworkUtils {
 
                 String image;
                 String title;
+                int movieId;
                 String date;
                 String plot;
                 double rating;
@@ -98,11 +99,12 @@ public class NetworkUtils {
                     JSONObject movieObject = results.getJSONObject(x);
                     image = movieObject.getString("poster_path");
                     title = movieObject.getString("title");
+                    movieId = movieObject.getInt("id");
                     date = movieObject.getString("release_date");
                     plot = movieObject.getString("overview");
                     rating = movieObject.getDouble("vote_average");
 
-                    Movie movie = new Movie(image, title, date, plot, rating);
+                    Movie movie = new Movie(image, title, movieId, date, plot, rating);
 
                     movieList.add(movie);
                 }
