@@ -23,7 +23,8 @@
                 android:padding="10dp"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="MovieTitle" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -49,7 +50,8 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="xx.xx.xxxx" />
 
                 <TextView
                     android:id="@+id/rating_textview"
@@ -59,7 +61,8 @@
                     android:padding="10dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="9.9" />
 
             </RelativeLayout>
 
@@ -84,7 +87,86 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="This is the movie description." />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trailerLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/trailer_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="startTrailer"
+                android:paddingLeft="30dp"
+                android:text="@string/trailer1"
+                android:textColor="@android:color/black"
+                tools:text="Trailer 1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trailerLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/trailer_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="startTrailer"
+                android:paddingLeft="30dp"
+                android:text="@string/trailer2"
+                android:textColor="@android:color/black"
+                tools:text="Trailer 2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trailerLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/trailer_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="startTrailer"
+                android:paddingLeft="30dp"
+                android:text="@string/trailer3"
+                android:textColor="@android:color/black"
+                tools:text="Trailer 3" />
 
         </LinearLayout>
 

@@ -1,20 +1,47 @@
 package com.mahausch.couchmovies;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class DetailActivity extends AppCompatActivity {
+
+    private static final String TRAILER_URL_START = "http://api.themoviedb.org/3/movie/";
+    private static final String TRAILER_URL_END = "/videos?api_key=";
+    private static final String API_KEY = "";
+
+    private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
     private TextView mTitle;
     private TextView mDate;
     private ImageView mImage;
     private TextView mRating;
     private TextView mPlot;
+    private LinearLayout mTrailer1;
+    private LinearLayout mTrailer2;
+    private LinearLayout mTrailer3;
+
+    public ArrayList<String> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +53,10 @@ public class DetailActivity extends AppCompatActivity {
         mImage = (ImageView) findViewById(R.id.imageview);
         mRating = (TextView) findViewById(R.id.rating_textview);
         mPlot = (TextView) findViewById(R.id.plot_textview);
+        mTrailer1 = (LinearLayout) findViewById(R.id.trailerLayout1);
+        mTrailer2 = (LinearLayout) findViewById(R.id.trailerLayout2);
+        mTrailer3 = (LinearLayout) findViewById(R.id.trailerLayout3);
+
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra("movie");
@@ -45,5 +76,108 @@ public class DetailActivity extends AppCompatActivity {
             mRating.setBackgroundResource(R.color.good);
         }
 
+        Integer id = movie.getMovieId();
+        new TrailerTask().execute(id);
+
+    }
+
+    public void startTrailer(View view){
+
+        int id = view.getId();
+        String trailerId = "";
+
+        if (id == R.id.trailer_1){
+            trailerId = mList.get(0);
+        } else if (id == R.id.trailer_2){
+            trailerId = mList.get(1);
+        }else if (id == R.id.trailer_3) {
+            trailerId = mList.get(2);
+        } else {
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(YOUTUBE_URL+trailerId));
+        startActivity(intent);
+    }
+
+    public class TrailerTask extends AsyncTask<Integer,Void,ArrayList<String>> {
+
+
+        @Override
+        protected ArrayList<String> doInBackground(Integer... id) {
+
+            Uri uri;
+
+            uri = Uri.parse(TRAILER_URL_START + id[0] + TRAILER_URL_END + API_KEY);
+
+            URL url = null;
+            try {
+                url = new URL(uri.toString());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection urlConnection = null;
+            String jsonData = "";
+
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                InputStream input = urlConnection.getInputStream();
+
+                Scanner scanner = new Scanner(input);
+                scanner.useDelimiter("\\A");
+
+                boolean hasInput = scanner.hasNext();
+                if (hasInput) {
+                    jsonData = scanner.next();
+                } else {
+                    return null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
+
+
+            ArrayList<String> trailerList = new ArrayList<>();
+
+            try {
+                JSONObject jsonObject = new JSONObject(jsonData);
+                JSONArray results = jsonObject.getJSONArray("results");
+
+                String trailer;
+
+                for (int x = 0; x < results.length(); x++) {
+                    JSONObject movieObject = results.getJSONObject(x);
+                    trailer = movieObject.getString("key");
+
+                    trailerList.add(trailer);
+                }
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+            return trailerList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> list) {
+
+            mList = list;
+            int size = mList.size();
+
+            if(size == 1) {
+                mTrailer1.setVisibility(View.VISIBLE);
+            } else if (size == 2) {
+                mTrailer1.setVisibility(View.VISIBLE);
+                mTrailer2.setVisibility(View.VISIBLE);
+            } else if (size >= 3) {
+                mTrailer1.setVisibility(View.VISIBLE);
+                mTrailer2.setVisibility(View.VISIBLE);
+                mTrailer3.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
