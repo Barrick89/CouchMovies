@@ -74,6 +74,7 @@ public class Movie implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mImage);
         parcel.writeString(mTitle);
+        parcel.writeInt(mMovieId);
         parcel.writeString(mDate);
         parcel.writeString(mPlot);
         parcel.writeDouble(mRating);
