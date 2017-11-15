@@ -82,6 +82,7 @@ public class Movie implements Parcelable {
     public void readFromParcel (Parcel in){
         mImage = in.readString();
         mTitle = in.readString();
+        mMovieId = in.readInt();
         mDate = in.readString();
         mPlot = in.readString();
         mRating = in.readDouble();
