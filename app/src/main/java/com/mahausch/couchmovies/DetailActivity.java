@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mahausch.couchmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -30,14 +31,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<String>> {
+public class DetailActivity extends AppCompatActivity{
 
-    private static final String TRAILER_URL_START = "http://api.themoviedb.org/3/movie/";
-    private static final String TRAILER_URL_END = "/videos?api_key=";
-    private static final String API_KEY = "";
-
-    private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
     private static final int TRAILER_LOADER = 100;
+    private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
     private TextView mTitle;
     private TextView mDate;
@@ -88,104 +85,59 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         int movieId = movie.getMovieId();
         Bundle args = new Bundle();
         args.putInt("id", movieId);
-        getLoaderManager().initLoader(TRAILER_LOADER, args, this).forceLoad();
+        getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
 
     }
 
-    @Override
-    public Loader<ArrayList<String>> onCreateLoader(int id, Bundle args) {
+    private LoaderManager.LoaderCallbacks<ArrayList<String>> mLoaderCallbacksTrailer = new LoaderManager.LoaderCallbacks<ArrayList<String>>() {
+        @Override
+        public Loader<ArrayList<String>> onCreateLoader(int id, Bundle args) {
 
-        final int movieId = args.getInt("id");
+            final int movieId = args.getInt("id");
 
-        return new android.content.AsyncTaskLoader<ArrayList<String>>(this) {
+            return new android.content.AsyncTaskLoader<ArrayList<String>>(getBaseContext()) {
 
 
-            @Override
-            public ArrayList<String> loadInBackground() {
-                Uri uri;
+                @Override
+                public ArrayList<String> loadInBackground() {
 
-                uri = Uri.parse(TRAILER_URL_START + movieId + TRAILER_URL_END + API_KEY);
+                    URL url = NetworkUtils.buildDetailUrl(NetworkUtils.TRAILER_URL_END, movieId);
+                    String jsonData = NetworkUtils.getResponseFromDetailHttpUrl(url);
 
-                URL url = null;
-                try {
-                    url = new URL(uri.toString());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    return NetworkUtils.getTrailerDataFromJson(jsonData);
                 }
-
-                HttpURLConnection urlConnection = null;
-                String jsonData = "";
-
-                try {
-                    urlConnection = (HttpURLConnection) url.openConnection();
-
-                    InputStream input = urlConnection.getInputStream();
-
-                    Scanner scanner = new Scanner(input);
-                    scanner.useDelimiter("\\A");
-
-                    boolean hasInput = scanner.hasNext();
-                    if (hasInput) {
-                        jsonData = scanner.next();
-                    } else {
-                        return null;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    urlConnection.disconnect();
-                }
-
-
-                ArrayList<String> trailerList = new ArrayList<>();
-
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonData);
-                    JSONArray results = jsonObject.getJSONArray("results");
-
-                    String trailer;
-
-                    for (int x = 0; x < results.length(); x++) {
-                        JSONObject movieObject = results.getJSONObject(x);
-                        trailer = movieObject.getString("key");
-
-                        trailerList.add(trailer);
-                    }
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-                return trailerList;
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ArrayList<String>> loader, ArrayList<String> data) {
-        mList = data;
-        int size = mList.size();
-
-        if(size == 1) {
-            mTrailer1.setOnClickListener(mListener);
-            mTrailer1.setTextColor(Color.BLACK);
-        } else if (size == 2) {
-            mTrailer1.setTextColor(Color.BLACK);
-            mTrailer1.setOnClickListener(mListener);
-            mTrailer2.setTextColor(Color.BLACK);
-            mTrailer2.setOnClickListener(mListener);
-        } else if (size >= 3) {
-            mTrailer1.setTextColor(Color.BLACK);
-            mTrailer1.setOnClickListener(mListener);
-            mTrailer2.setTextColor(Color.BLACK);
-            mTrailer2.setOnClickListener(mListener);
-            mTrailer3.setTextColor(Color.BLACK);
-            mTrailer3.setOnClickListener(mListener);
+            };
         }
-    }
 
-    @Override
-    public void onLoaderReset(Loader<ArrayList<String>> loader) {
+        @Override
+        public void onLoadFinished(Loader<ArrayList<String>> loader, ArrayList<String> data) {
+            mList = data;
+            int size = mList.size();
 
-    }
+            if(size == 1) {
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer1.setTextColor(Color.BLACK);
+            } else if (size == 2) {
+                mTrailer1.setTextColor(Color.BLACK);
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer2.setTextColor(Color.BLACK);
+                mTrailer2.setOnClickListener(mListener);
+            } else if (size >= 3) {
+                mTrailer1.setTextColor(Color.BLACK);
+                mTrailer1.setOnClickListener(mListener);
+                mTrailer2.setTextColor(Color.BLACK);
+                mTrailer2.setOnClickListener(mListener);
+                mTrailer3.setTextColor(Color.BLACK);
+                mTrailer3.setOnClickListener(mListener);
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList<String>> loader) {
+
+        }
+    };
+
 
     public class TrailerListener implements View.OnClickListener{
 
@@ -209,4 +161,36 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             startActivity(intent);
         }
     }
+
+    private LoaderManager.LoaderCallbacks<ArrayList<Review>> mLoaderCallbacksReview = new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
+
+        @Override
+        public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
+
+            final int movieId = args.getInt("id");
+
+            return new android.content.AsyncTaskLoader<ArrayList<Review>>(getBaseContext()) {
+
+
+                @Override
+                public ArrayList<Review> loadInBackground() {
+
+                    URL url = NetworkUtils.buildDetailUrl(NetworkUtils.REVIEW_URL_END, movieId);
+                    String jsonData = NetworkUtils.getResponseFromDetailHttpUrl(url);
+
+                    return NetworkUtils.getReviewDataFromJson(jsonData);
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList<Review>> loader) {
+
+        }
+    };
 }
