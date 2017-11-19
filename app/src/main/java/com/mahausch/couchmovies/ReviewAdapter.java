@@ -41,6 +41,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         }
     }
 
+    public void setReviewData(ArrayList<Review> reviewData) {
+        mReviewData = reviewData;
+        notifyDataSetChanged();
+    }
+
 
     class ReviewHolder extends RecyclerView.ViewHolder{
 

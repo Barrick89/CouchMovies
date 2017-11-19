@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +36,7 @@ import java.util.Scanner;
 public class DetailActivity extends AppCompatActivity{
 
     private static final int TRAILER_LOADER = 100;
+    private static final int REVIEW_LOADER = 200;
     private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
     private TextView mTitle;
@@ -47,7 +50,8 @@ public class DetailActivity extends AppCompatActivity{
     private TrailerListener mListener;
 
     public ArrayList<String> mList;
-
+    RecyclerView mRecyclerView;
+    ReviewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class DetailActivity extends AppCompatActivity{
         mTrailer1 = (TextView) findViewById(R.id.trailer_1);
         mTrailer2 = (TextView) findViewById(R.id.trailer_2);
         mTrailer3 = (TextView) findViewById(R.id.trailer_3);
+        mRecyclerView = (RecyclerView) findViewById(R.id.reviewRecycler);
         mListener = new TrailerListener();
 
         Intent intent = getIntent();
@@ -82,10 +87,16 @@ public class DetailActivity extends AppCompatActivity{
             mRating.setBackgroundResource(R.color.good);
         }
 
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(manager);
+        mAdapter = new ReviewAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
         int movieId = movie.getMovieId();
         Bundle args = new Bundle();
         args.putInt("id", movieId);
         getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
+        getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
 
     }
 
@@ -185,7 +196,9 @@ public class DetailActivity extends AppCompatActivity{
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
-
+            if (data != null){
+                mAdapter.setReviewData(data);
+            }
         }
 
         @Override
