@@ -14,6 +14,9 @@
     <string name="settings_order_by_rating_label">Highest rated</string>
     <string name="settings_order_by_rating_value" translatable="false">rating</string>
 
+    <string name="settings_order_by_favorites_label">Favorites</string>
+    <string name="settings_order_by_favorites_value" translatable="false">favorites</string>
+
     <string name="network_error">No internet connection.</string>
     <string name="error">Something went wrong.</string>
 
