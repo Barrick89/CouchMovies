@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -101,12 +103,19 @@ public class DetailActivity extends AppCompatActivity{
         mAdapter = new ReviewAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        int movieId = movie.getMovieId();
-        Bundle args = new Bundle();
-        args.putInt("id", movieId);
-        getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
-        getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
 
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            int movieId = movie.getMovieId();
+            Bundle args = new Bundle();
+            args.putInt("id", movieId);
+
+            getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
+            getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
+        }
     }
 
     private LoaderManager.LoaderCallbacks<ArrayList<String>> mLoaderCallbacksTrailer = new LoaderManager.LoaderCallbacks<ArrayList<String>>() {
