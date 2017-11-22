@@ -4,6 +4,8 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mahausch.couchmovies.data.MovieContract;
 import com.mahausch.couchmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +58,8 @@ public class DetailActivity extends AppCompatActivity{
     public ArrayList<String> mList;
     RecyclerView mRecyclerView;
     ReviewAdapter mAdapter;
+
+    private boolean mIsInDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +103,14 @@ public class DetailActivity extends AppCompatActivity{
             mRating.setBackgroundResource(R.color.good);
         }
 
+        mIsInDatabase = checkIsDataAlreadyInDBorNot(movie.getMovieId());
+
+        if (mIsInDatabase){
+            mStar.setImageResource(R.drawable.ic_full_star);
+        } else {
+            mStar.setImageResource(R.drawable.ic_empty_star);
+        }
+
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new ReviewAdapter();
@@ -116,6 +129,22 @@ public class DetailActivity extends AppCompatActivity{
             getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
             getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
         }
+    }
+
+    private boolean checkIsDataAlreadyInDBorNot(int movieId) {
+
+        Cursor cursor = getContentResolver().query(MovieContract.BASE_CONTENT_URI,
+                                                    null,
+                                                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + "="+ movieId,
+                                                    null,
+                                                    null);
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 
     private LoaderManager.LoaderCallbacks<ArrayList<String>> mLoaderCallbacksTrailer = new LoaderManager.LoaderCallbacks<ArrayList<String>>() {
