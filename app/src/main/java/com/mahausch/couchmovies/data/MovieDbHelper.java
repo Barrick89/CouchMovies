@@ -20,6 +20,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + " ("
                 + MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL UNIQUE, "
                 + MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, "
                 + MovieEntry.COLUMN_DATE + " TEXT NOT NULL, "
                 + MovieEntry.COLUMN_RATING + " REAL NOT NULL, "

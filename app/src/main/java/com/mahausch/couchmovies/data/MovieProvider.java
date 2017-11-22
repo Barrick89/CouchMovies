@@ -47,8 +47,6 @@ public class MovieProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 break;
 
-            case CODE_MOVIES:
-                selection = MovieContract.MovieEntry.COLUMN_IMAGE + "=?";
         }
 
         cursor = mOpenHelper.getReadableDatabase().query(

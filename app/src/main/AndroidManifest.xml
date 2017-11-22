@@ -32,6 +32,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mahausch.couchmovies.MainActivity" />
         </activity>
+        <provider
+            android:name=".data.MovieProvider"
+            android:authorities="com.example.android.couchmovies"
+            android:exported="false" />
     </application>
 
 </manifest>

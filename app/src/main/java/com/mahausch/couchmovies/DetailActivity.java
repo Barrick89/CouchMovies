@@ -47,6 +47,7 @@ public class DetailActivity extends AppCompatActivity{
     private TextView mTrailer1;
     private TextView mTrailer2;
     private TextView mTrailer3;
+    private ImageView mStar;
     private TrailerListener mListener;
 
     public ArrayList<String> mList;
@@ -66,8 +67,16 @@ public class DetailActivity extends AppCompatActivity{
         mTrailer1 = (TextView) findViewById(R.id.trailer_1);
         mTrailer2 = (TextView) findViewById(R.id.trailer_2);
         mTrailer3 = (TextView) findViewById(R.id.trailer_3);
+        mStar = (ImageView) findViewById(R.id.star);
         mRecyclerView = (RecyclerView) findViewById(R.id.reviewRecycler);
         mListener = new TrailerListener();
+
+        mStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra("movie");
