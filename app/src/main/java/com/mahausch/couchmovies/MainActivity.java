@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void startTaskLoader() {
 
         if (mPreference.equals("favorites")) {
-            getSupportLoaderManager().restartLoader(2, null, mLoaderCallbacksFavorites);
+            getSupportLoaderManager().restartLoader(1, null, mLoaderCallbacksFavorites);
         } else {
 
             ConnectivityManager connectivityManager =
