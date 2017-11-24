@@ -1,6 +1,7 @@
 package com.mahausch.couchmovies;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -59,7 +60,9 @@ public class DetailActivity extends AppCompatActivity{
     RecyclerView mRecyclerView;
     ReviewAdapter mAdapter;
 
+    private Movie mMovie;
     private boolean mIsInDatabase;
+    private int mMovieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,22 +81,15 @@ public class DetailActivity extends AppCompatActivity{
         mRecyclerView = (RecyclerView) findViewById(R.id.reviewRecycler);
         mListener = new TrailerListener();
 
-        mStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra("movie");
+        mMovie = intent.getParcelableExtra("movie");
 
-        mTitle.setText(movie.getTitle());
-        mDate.setText(movie.getDate());
-        Picasso.with(mImage.getContext()).load(movie.getImage()).into(mImage);
-        Double rating = movie.getRating();
+        mTitle.setText(mMovie.getTitle());
+        mDate.setText(mMovie.getDate());
+        Picasso.with(mImage.getContext()).load(mMovie.getImage()).into(mImage);
+        Double rating = mMovie.getRating();
         mRating.setText(rating.toString());
-        mPlot.setText(movie.getPlot());
+        mPlot.setText(mMovie.getPlot());
 
         if (rating < 4.0) {
             mRating.setBackgroundResource(R.color.bad);
@@ -103,13 +99,12 @@ public class DetailActivity extends AppCompatActivity{
             mRating.setBackgroundResource(R.color.good);
         }
 
-        mIsInDatabase = checkIsDataAlreadyInDBorNot(movie.getMovieId());
+        mMovieId = mMovie.getMovieId();
+        Bundle args = new Bundle();
+        args.putInt("id", mMovieId);
 
-        if (mIsInDatabase){
-            mStar.setImageResource(R.drawable.ic_full_star);
-        } else {
-            mStar.setImageResource(R.drawable.ic_empty_star);
-        }
+        mIsInDatabase = checkIsDataAlreadyInDBorNot();
+        setFavoriteIcon();
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -122,20 +117,50 @@ public class DetailActivity extends AppCompatActivity{
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            int movieId = movie.getMovieId();
-            Bundle args = new Bundle();
-            args.putInt("id", movieId);
 
             getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
             getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
         }
+
+        mStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIsInDatabase){
+                    getContentResolver().delete(MovieContract.BASE_CONTENT_URI,
+                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=" + mMovieId,
+                            null);
+                    mIsInDatabase = false;
+                    setFavoriteIcon();
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovie.getMovieId());
+                    values.put(MovieContract.MovieEntry.COLUMN_TITLE, mMovie.getTitle());
+                    values.put(MovieContract.MovieEntry.COLUMN_DATE, mMovie.getRawDate());
+                    values.put(MovieContract.MovieEntry.COLUMN_RATING, mMovie.getRating());
+                    values.put(MovieContract.MovieEntry.COLUMN_IMAGE, mMovie.getImageId());
+                    values.put(MovieContract.MovieEntry.COLUMN_CONTENT, mMovie.getPlot());
+
+                    getContentResolver().insert(MovieContract.BASE_CONTENT_URI, values);
+                    mIsInDatabase = true;
+                    setFavoriteIcon();
+                }
+            }
+        });
     }
 
-    private boolean checkIsDataAlreadyInDBorNot(int movieId) {
+    private void setFavoriteIcon(){
+        if (mIsInDatabase){
+            mStar.setImageResource(R.drawable.ic_full_star);
+        } else {
+            mStar.setImageResource(R.drawable.ic_empty_star);
+        }
+    }
+
+    private boolean checkIsDataAlreadyInDBorNot() {
 
         Cursor cursor = getContentResolver().query(MovieContract.BASE_CONTENT_URI,
                                                     null,
-                                                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + "="+ movieId,
+                                                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + "="+ mMovieId,
                                                     null,
                                                     null);
 
@@ -146,6 +171,7 @@ public class DetailActivity extends AppCompatActivity{
         cursor.close();
         return true;
     }
+
 
     private LoaderManager.LoaderCallbacks<ArrayList<String>> mLoaderCallbacksTrailer = new LoaderManager.LoaderCallbacks<ArrayList<String>>() {
         @Override

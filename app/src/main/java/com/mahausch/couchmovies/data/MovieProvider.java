@@ -40,15 +40,6 @@ public class MovieProvider extends ContentProvider {
 
         Cursor cursor;
 
-        switch (sUriMatcher.match(uri)){
-
-            case CODE_MOVIE_WITH_ID:
-                selection = MovieContract.MovieEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                break;
-
-        }
-
         cursor = mOpenHelper.getReadableDatabase().query(
                 MovieContract.MovieEntry.TABLE_NAME,
                 projection,
@@ -72,10 +63,6 @@ public class MovieProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
 
-        switch (sUriMatcher.match(uri)) {
-
-            case CODE_MOVIE_WITH_ID:
-
                 long id = mOpenHelper.getWritableDatabase().
                         insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
 
@@ -86,19 +73,11 @@ public class MovieProvider extends ContentProvider {
 
                 getContext().getContentResolver().notifyChange(uri, null);
                 return ContentUris.withAppendedId(uri, id);
-        }
-        return null;
+
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-
-        switch (sUriMatcher.match(uri)){
-
-            case CODE_MOVIE_WITH_ID:
-                selection = MovieContract.MovieEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-        }
 
         int rowsDeleted = mOpenHelper.getWritableDatabase().delete(
                 MovieContract.MovieEntry.TABLE_NAME,

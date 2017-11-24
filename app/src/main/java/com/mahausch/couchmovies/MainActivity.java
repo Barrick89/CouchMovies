@@ -158,16 +158,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                     Uri currentUri = MovieContract.MovieEntry.CONTENT_URI;
 
-                    String[] projection = new String[]{
-                            MovieContract.MovieEntry._ID,
-                            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
-                            MovieContract.MovieEntry.COLUMN_TITLE,
-                            MovieContract.MovieEntry.COLUMN_DATE,
-                            MovieContract.MovieEntry.COLUMN_RATING,
-                            MovieContract.MovieEntry.COLUMN_IMAGE,
-                            MovieContract.MovieEntry.COLUMN_CONTENT
-                    };
-                    return getContentResolver().query(currentUri, projection, null, null, null);
+                    return getContentResolver().query(currentUri, null, null, null, null);
                 }
 
             };
@@ -176,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            if (data == null) {
+            if (data != null) {
 
                 ArrayList<Movie> list = new ArrayList<>();
                 data.moveToFirst();

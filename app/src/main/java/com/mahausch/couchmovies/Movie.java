@@ -36,6 +36,11 @@ public class Movie implements Parcelable {
         return image;
     }
 
+    public String getImageId() {
+        String image = mImage;
+        return image;
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -55,6 +60,10 @@ public class Movie implements Parcelable {
         formatter = new SimpleDateFormat("dd.MM.yyyy");
         String formattedDate = formatter.format(date);
         return formattedDate;
+    }
+
+    public String getRawDate(){
+        return mDate;
     }
 
     public String getPlot() {
