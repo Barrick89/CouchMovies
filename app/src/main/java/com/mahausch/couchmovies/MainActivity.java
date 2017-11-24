@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            if (data != null) {
+            if (data.getCount() != 0) {
 
                 ArrayList<Movie> list = new ArrayList<>();
                 data.moveToFirst();
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                 mAdapter.setMovieData(list);
             } else {
-                Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT);
                 toast.show();
             }
         }

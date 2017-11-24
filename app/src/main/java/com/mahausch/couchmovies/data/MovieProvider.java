@@ -38,7 +38,7 @@ public class MovieProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
-        Cursor cursor;
+        Cursor cursor = null;
 
         cursor = mOpenHelper.getReadableDatabase().query(
                 MovieContract.MovieEntry.TABLE_NAME,
@@ -49,7 +49,10 @@ public class MovieProvider extends ContentProvider {
                 null,
                 sortOrder
         );
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+        if (cursor != null) {
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return cursor;
     }
 

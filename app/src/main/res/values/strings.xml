@@ -19,6 +19,7 @@
 
     <string name="network_error">No internet connection.</string>
     <string name="error">Something went wrong.</string>
+    <string name="no_favorites">No movies in favorites.</string>
 
     <string name="trailer1">Trailer 1</string>
     <string name="trailer2">Trailer 2</string>
