@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -31,10 +33,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     RecyclerView mRecyclerView;
+    GridLayoutManager mManager;
     MovieAdapter mAdapter;
     ProgressBar mProgress;
     SharedPreferences mSharedPref;
     String mPreference;
+    static Parcelable mListState;
 
 
     @Override
@@ -46,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_grid);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mManager);
 
         mAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -60,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         );
 
         startTaskLoader();
-
 
         final SwipeRefreshLayout swipe = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
 
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mProgress.setVisibility(View.INVISIBLE);
             if (data != null) {
                 mAdapter.setMovieData(data);
+                mManager.onRestoreInstanceState(mListState);
             } else {
                 Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
                 toast.show();
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mProgress.setVisibility(View.INVISIBLE);
 
                 mAdapter.setMovieData(list);
+                mManager.onRestoreInstanceState(mListState);
             } else {
                 Toast toast = Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT);
                 toast.show();
@@ -224,6 +229,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (mListState != null) {
+            mManager.onRestoreInstanceState(mListState);
+        }
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -260,4 +269,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mListState = mManager.onSaveInstanceState();
+        outState.putParcelable("listState", mListState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mListState = savedInstanceState.getParcelable("listState");
+    }
+
 }
