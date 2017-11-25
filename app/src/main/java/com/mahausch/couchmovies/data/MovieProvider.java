@@ -19,7 +19,7 @@ public class MovieProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDbHelper mOpenHelper;
 
-    public static UriMatcher buildUriMatcher(){
+    public static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE, CODE_MOVIES);
@@ -66,16 +66,16 @@ public class MovieProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
 
-                long id = mOpenHelper.getWritableDatabase().
-                        insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
+        long id = mOpenHelper.getWritableDatabase().
+                insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
 
-                if (id == -1) {
-                    Log.e("Insert", "Failed to insert row for " + uri);
-                    return null;
-                }
+        if (id == -1) {
+            Log.e("Insert", "Failed to insert row for " + uri);
+            return null;
+        }
 
-                getContext().getContentResolver().notifyChange(uri, null);
-                return ContentUris.withAppendedId(uri, id);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
 
     }
 

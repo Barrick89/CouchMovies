@@ -27,7 +27,7 @@ public class Movie implements Parcelable {
         mRating = rating;
     }
 
-    public Movie (Parcel in){
+    public Movie(Parcel in) {
         readFromParcel(in);
     }
 
@@ -45,7 +45,7 @@ public class Movie implements Parcelable {
         return mTitle;
     }
 
-    public int getMovieId(){
+    public int getMovieId() {
         return mMovieId;
     }
 
@@ -62,7 +62,7 @@ public class Movie implements Parcelable {
         return formattedDate;
     }
 
-    public String getRawDate(){
+    public String getRawDate() {
         return mDate;
     }
 
@@ -89,7 +89,7 @@ public class Movie implements Parcelable {
         parcel.writeDouble(mRating);
     }
 
-    public void readFromParcel (Parcel in){
+    public void readFromParcel(Parcel in) {
         mImage = in.readString();
         mTitle = in.readString();
         mMovieId = in.readInt();
@@ -109,7 +109,9 @@ public class Movie implements Parcelable {
         public Movie[] newArray(int i) {
             return new Movie[i];
         }
-    }; {
+    };
+
+    {
 
     }
 }

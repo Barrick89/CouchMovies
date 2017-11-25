@@ -11,7 +11,7 @@ public class SettingsActivity extends Activity {
         setContentView(R.layout.settings_activity);
     }
 
-    public static class SettingsFragment extends PreferenceFragment  {
+    public static class SettingsFragment extends PreferenceFragment {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

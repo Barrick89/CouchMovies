@@ -6,16 +6,16 @@ public class Review {
     private String mAuthor;
     private String mContent;
 
-    public Review (String author, String content){
+    public Review(String author, String content) {
         mAuthor = author;
         mContent = content;
     }
 
-    public String getAuthor(){
+    public String getAuthor() {
         return mAuthor;
     }
 
-    public String getContent(){
+    public String getContent() {
         return mContent;
     }
 }

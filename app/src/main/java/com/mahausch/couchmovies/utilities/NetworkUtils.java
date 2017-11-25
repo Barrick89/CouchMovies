@@ -175,7 +175,7 @@ public class NetworkUtils {
 
                 trailerList.add(trailer);
             }
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return trailerList;
@@ -198,7 +198,7 @@ public class NetworkUtils {
 
                 reviewList.add(new Review(author, content));
             }
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return reviewList;

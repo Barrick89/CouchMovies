@@ -29,25 +29,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/title_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:padding="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_toLeftOf="@id/star"
-                    tools:text="MovieTitle" />
+                    <TextView
+                        android:id="@+id/title_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@id/star"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        tools:text="MovieTitle" />
 
-                <ImageView
-                    android:id="@+id/star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:background="@drawable/touch_selector"
-                    android:layout_alignParentRight="true"/>
+                    <ImageView
+                        android:id="@+id/star"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/touch_selector"
+                        android:padding="5dp" />
 
                 </RelativeLayout>
 
@@ -135,9 +135,9 @@
                     android:id="@+id/trailer_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/touch_selector"
                     android:padding="15dp"
                     android:text="@string/trailer1"
-                    android:background="@drawable/touch_selector"
                     tools:text="Trailer 1" />
 
                 <View
@@ -150,9 +150,9 @@
                     android:id="@+id/trailer_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/touch_selector"
                     android:padding="15dp"
                     android:text="@string/trailer2"
-                    android:background="@drawable/touch_selector"
                     tools:text="Trailer 2" />
 
                 <View
@@ -165,8 +165,8 @@
                     android:id="@+id/trailer_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
                     android:background="@drawable/touch_selector"
+                    android:padding="15dp"
                     android:text="@string/trailer3"
                     tools:text="Trailer 3" />
 
@@ -175,12 +175,12 @@
 
         </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/reviewRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviewRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 </ScrollView>

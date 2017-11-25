@@ -6,40 +6,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mahausch.couchmovies.data.MovieContract;
 import com.mahausch.couchmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class DetailActivity extends AppCompatActivity{
+public class DetailActivity extends AppCompatActivity {
 
     private static final int TRAILER_LOADER = 100;
     private static final int REVIEW_LOADER = 200;
@@ -125,7 +111,7 @@ public class DetailActivity extends AppCompatActivity{
         mStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsInDatabase){
+                if (mIsInDatabase) {
                     getContentResolver().delete(MovieContract.BASE_CONTENT_URI,
                             MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=" + mMovieId,
                             null);
@@ -148,8 +134,8 @@ public class DetailActivity extends AppCompatActivity{
         });
     }
 
-    private void setFavoriteIcon(){
-        if (mIsInDatabase){
+    private void setFavoriteIcon() {
+        if (mIsInDatabase) {
             mStar.setImageResource(R.drawable.ic_full_star);
         } else {
             mStar.setImageResource(R.drawable.ic_empty_star);
@@ -159,12 +145,12 @@ public class DetailActivity extends AppCompatActivity{
     private boolean checkIsDataAlreadyInDBorNot() {
 
         Cursor cursor = getContentResolver().query(MovieContract.BASE_CONTENT_URI,
-                                                    null,
-                                                    MovieContract.MovieEntry.COLUMN_MOVIE_ID + "="+ mMovieId,
-                                                    null,
-                                                    null);
+                null,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=" + mMovieId,
+                null,
+                null);
 
-        if(cursor.getCount() <= 0){
+        if (cursor.getCount() <= 0) {
             cursor.close();
             return false;
         }
@@ -198,7 +184,7 @@ public class DetailActivity extends AppCompatActivity{
             mList = data;
             int size = mList.size();
 
-            if(size == 1) {
+            if (size == 1) {
                 mTrailer1.setOnClickListener(mListener);
                 mTrailer1.setTextColor(Color.BLACK);
             } else if (size == 2) {
@@ -223,25 +209,25 @@ public class DetailActivity extends AppCompatActivity{
     };
 
 
-    public class TrailerListener implements View.OnClickListener{
+    public class TrailerListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
             int id = v.getId();
             String trailerId = "";
 
-            if (id == R.id.trailer_1){
+            if (id == R.id.trailer_1) {
                 trailerId = mList.get(0);
-            } else if (id == R.id.trailer_2){
+            } else if (id == R.id.trailer_2) {
                 trailerId = mList.get(1);
-            }else if (id == R.id.trailer_3) {
+            } else if (id == R.id.trailer_3) {
                 trailerId = mList.get(2);
             } else {
                 return;
             }
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(YOUTUBE_URL+trailerId));
+            intent.setData(Uri.parse(YOUTUBE_URL + trailerId));
             startActivity(intent);
         }
     }
@@ -269,7 +255,7 @@ public class DetailActivity extends AppCompatActivity{
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
-            if (data != null){
+            if (data != null) {
                 mAdapter.setReviewData(data);
             }
         }
