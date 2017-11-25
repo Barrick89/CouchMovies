@@ -46,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    android:background="@drawable/touch_selector"
                     android:layout_alignParentRight="true"/>
 
                 </RelativeLayout>
@@ -136,6 +137,7 @@
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:text="@string/trailer1"
+                    android:background="@drawable/touch_selector"
                     tools:text="Trailer 1" />
 
                 <View
@@ -150,6 +152,7 @@
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:text="@string/trailer2"
+                    android:background="@drawable/touch_selector"
                     tools:text="Trailer 2" />
 
                 <View
@@ -163,6 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
+                    android:background="@drawable/touch_selector"
                     android:text="@string/trailer3"
                     tools:text="Trailer 3" />
 
