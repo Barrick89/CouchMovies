@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,8 @@ public class DetailActivity extends AppCompatActivity {
     public ArrayList<String> mList;
     RecyclerView mRecyclerView;
     ReviewAdapter mAdapter;
+    RecyclerView.LayoutManager mManager;
+    static Parcelable mListState;
 
     private Movie mMovie;
     private boolean mIsInDatabase;
@@ -92,8 +95,8 @@ public class DetailActivity extends AppCompatActivity {
         mIsInDatabase = checkIsDataAlreadyInDBorNot();
         setFavoriteIcon();
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(manager);
+        mManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mManager);
         mAdapter = new ReviewAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
@@ -257,6 +260,9 @@ public class DetailActivity extends AppCompatActivity {
         public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
             if (data != null) {
                 mAdapter.setReviewData(data);
+                if (mListState != null) {
+                    mManager.onRestoreInstanceState(mListState);
+                }
             }
         }
 
@@ -265,4 +271,28 @@ public class DetailActivity extends AppCompatActivity {
 
         }
     };
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mListState = mManager.onSaveInstanceState();
+        outState.putParcelable("listState", mListState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mListState = savedInstanceState.getParcelable("listState");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mListState != null) {
+            mManager.onRestoreInstanceState(mListState);
+        }
+    }
 }

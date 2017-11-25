@@ -126,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mProgress.setVisibility(View.INVISIBLE);
             if (data != null) {
                 mAdapter.setMovieData(data);
-                mManager.onRestoreInstanceState(mListState);
+                if (mListState != null) {
+                    mManager.onRestoreInstanceState(mListState);
+                }
             } else {
                 Toast toast = Toast.makeText(MainActivity.this, R.string.error, Toast.LENGTH_SHORT);
                 toast.show();
@@ -196,7 +198,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mProgress.setVisibility(View.INVISIBLE);
 
                 mAdapter.setMovieData(list);
-                mManager.onRestoreInstanceState(mListState);
+                if (mListState != null) {
+                    mManager.onRestoreInstanceState(mListState);
+                }
             } else {
                 Toast toast = Toast.makeText(MainActivity.this, R.string.no_favorites, Toast.LENGTH_SHORT);
                 toast.show();
