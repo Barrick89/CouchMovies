@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mRecyclerView = (RecyclerView) findViewById(R.id.movie_grid);
 
-        mManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        mManager = new GridLayoutManager(this, numberOfColumns(), GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mManager);
 
         mAdapter = new MovieAdapter(this);
@@ -76,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
         });
 
+    }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int widthDivider = 300;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
     }
 
     @Override
