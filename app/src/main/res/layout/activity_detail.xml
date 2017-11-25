@@ -38,6 +38,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:layout_toLeftOf="@id/star"
                     tools:text="MovieTitle" />
 
                 <ImageView
