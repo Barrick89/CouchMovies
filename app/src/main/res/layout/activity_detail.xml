@@ -41,13 +41,14 @@
                         android:textStyle="bold"
                         tools:text="MovieTitle" />
 
-                    <ImageView
+                    <android.support.design.widget.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/star"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/touch_selector"
-                        android:padding="5dp" />
+                        android:layout_margin="10dp"
+                        fab:fabSize="auto" />
 
                 </RelativeLayout>
 
