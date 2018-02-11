@@ -2,7 +2,10 @@
 
 CouchMovies is an Android app to inspire the user what film to watch next. Therefore 
 the user can browse through the most popular and highest ratest films of 
-themoviedb.org. By tapping on a movie poster additional details like
+themoviedb.org. The app fetches the JSON-data from the server and stores the information
+in a SQLite database via a content provider. 
+
+By tapping on a movie poster additional details like
 title, plot and rating are shown, trailers can be watched and user reviews can be read.
 
 To get started clone the repository and get the code running in Android Studio.                                                            To fetch the data in this app, an API key from themoviedb.org is needed.
