@@ -48,6 +48,8 @@
                         android:layout_alignParentRight="true"
                         android:background="@drawable/touch_selector"
                         android:elevation="6dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="center"
                         android:stateListAnimator="@animator/button_elevation"
                         android:layout_margin="10dp"
                         fab:fabSize="auto" />
