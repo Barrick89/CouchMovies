@@ -105,12 +105,14 @@ public class DetailActivity extends AppCompatActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
+        // Load trailer URLs and reviews if there is an internet connection
         if (networkInfo != null && networkInfo.isConnected()) {
 
             getLoaderManager().initLoader(TRAILER_LOADER, args, mLoaderCallbacksTrailer).forceLoad();
             getLoaderManager().initLoader(REVIEW_LOADER, args, mLoaderCallbacksReview).forceLoad();
         }
 
+        //Add movie to favorite list if the star gets clicked
         mStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +139,7 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    //Set the star icon full or empty dependent on whether the movie is on the favorite list
     private void setFavoriteIcon() {
         if (mIsInDatabase) {
             mStar.setImageResource(R.drawable.ic_full_star);

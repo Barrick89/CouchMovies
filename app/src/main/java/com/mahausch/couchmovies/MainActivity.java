@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -79,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
+    //Get the number of columns dependent on the screen width
     private int numberOfColumns() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         }
     };
+
 
     private LoaderManager.LoaderCallbacks<Cursor> mLoaderCallbacksFavorites = new LoaderManager.LoaderCallbacks<Cursor>() {
 
@@ -263,6 +264,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
+    /*If preferences are set on "favorites", the favorites loadermanager gets called,
+        otherwise if there is an internet connection the internet loadermanager gets called
+     */
     public void startTaskLoader() {
 
         if (mPreference.equals("favorites")) {
